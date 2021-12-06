@@ -6,12 +6,19 @@
 # Introduction
 This is a modified version of ChampSim used by Prajyot Gupta.
 
-# Clone ChampSim repository
-```
-git clone https://github.com/ChampSim/ChampSim.git
-```
+# Important Code structures & Objects in ChampSim
 
-# Compile
+* **ooo_cpu.c**: `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. 
+
+* **instruction.h**: Three registers present which help us identify branches. Also defined 8 types of Branches.
+
+* General Observations
+  - PC is called `ip` in the simulator.
+  - OOO Model instruction has `is_branch`, `branch_taken`, `branch_mispredicted` & `branch_prediction_made` as unit8_t.
+  - 
+
+# ChampSim Setup Instructions from the OG Repo
+## Compile
 
 ChampSim takes five parameters: Branch predictor, L1D prefetcher, L2C prefetcher, LLC replacement policy, and the number of cores. 
 For example, `./build_champsim.sh bimodal no no lru 1` builds a single-core processor with bimodal branch predictor, no L1/L2 data prefetchers, and the baseline LRU replacement policy for the LLC.
@@ -20,17 +27,7 @@ $ ./build_champsim.sh bimodal no no no no lru 1
 
 $ ./build_champsim.sh ${BRANCH} ${L1I_PREFETCHER} ${L1D_PREFETCHER} ${L2C_PREFETCHER} ${LLC_PREFETCHER} ${LLC_REPLACEMENT} ${NUM_CORE}
 ```
-
-# Download DPC-3 trace
-
-Professor Daniel Jimenez at Texas A&M University kindly provided traces for DPC-3. Use the following script to download these traces (~20GB size and max simpoint only).
-```
-$ cd scripts
-
-$ ./download_dpc3_traces.sh
-```
-
-# Run simulation
+## Run simulation
 
 Execute `run_champsim.sh` with proper input arguments. The default `TRACE_DIR` in `run_champsim.sh` is set to `$PWD/dpc3_traces`. <br>
 
@@ -57,7 +54,7 @@ $ ./run_4core.sh bimodal-no-no-no-lru-4core 1 10 0 400.perlbench-41B.champsimtra
 Note that we need to specify multiple trace files for `run_4core.sh`. `N_MIX` is used to represent a unique ID for mixed multi-programmed workloads. 
 
 
-# Add your own branch predictor, data prefetchers, and replacement policy
+## Add your own branch predictor, data prefetchers, and replacement policy
 **Copy an empty template**
 ```
 $ cp branch/branch_predictor.cc branch/mybranch.bpred
@@ -82,7 +79,7 @@ $ ./build_champsim.sh mybranch mypref mypref mypref myrepl 1
 $ ./run_champsim.sh mybranch-mypref-mypref-mypref-myrepl-1core 1 10 bzip2_183B
 ```
 
-# How to create traces
+## How to create traces
 
 We have included only 4 sample traces, taken from SPEC CPU 2006. These 
 traces are short (10 million instructions), and do not necessarily cover the range of behaviors your 
