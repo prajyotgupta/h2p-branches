@@ -1,7 +1,6 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
-
 // instruction format
 #define ROB_SIZE 352
 #define LQ_SIZE 128
@@ -127,7 +126,7 @@ class ooo_model_instr {
             asid[2],
             reg_RAW_checked[NUM_INSTR_SOURCES];
 
-    uint8_t branch_type;
+    uint8_t  branch_type;
     uint64_t branch_target;
 
     uint32_t fetched, scheduled;
@@ -184,7 +183,7 @@ class ooo_model_instr {
         is_memory = 0;
         branch_taken = 0;
         branch_mispredicted = 0;
-	branch_prediction_made = 0;
+	    branch_prediction_made = 0;
         translated = 0;
         data_translated = 0;
         is_producer = 0;
@@ -198,8 +197,8 @@ class ooo_model_instr {
         asid[0] = UINT8_MAX;
         asid[1] = UINT8_MAX;
 
-	branch_type = NOT_BRANCH;
-	branch_target = 0;
+	    branch_type = NOT_BRANCH;
+	    branch_target = 0;
 
         instruction_pa = 0;
         data_pa = 0;
@@ -268,5 +267,26 @@ class ooo_model_instr {
     cout << endl;
   }
 };
+
+/******************************************************************************
+ * API          : print_branch_data()
+ * Author       : Prajyot Gupta
+ * Description  : Prints branch data for the ooo_model_instr Instruction
+ * Inputs Args  : NULL
+ * Out Args     : NULL
+ * ***************************************************************************/
+  void print_branch_data()
+  {
+    cout << "******** prajyotg :: Printing Branch Data ********" << endl;
+    cout << "*** Instruction ID: " << instr_id << " ***" << endl;
+    cout << "*** PC Value: "     << hex << "0x" << (uint64_t)ip << dec << endl;
+    cout << "*** Is branch: "    << hex << (uint32_t)is_branch << endl;
+    cout << "*** Branch Type: "  << hex << (uint32_t)branch_type << endl;
+    cout << "*** Branch Target: "<< hex << "0x" << (uint32_t)branch_target << endl;
+    cout << "*** Branch Prediction Made: " << branch_prediction_made << endl;
+    cout << "*** Branch taken: " << (uint32_t)branch_taken << endl;
+    cout << "*** Branch Mispredicted: " << (uint32_t)branch_mispredicted << endl;
+    cout << "******** Printed Branch Data ********" << endl;
+  }
 
 #endif
