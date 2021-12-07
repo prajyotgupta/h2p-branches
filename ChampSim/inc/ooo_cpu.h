@@ -20,6 +20,7 @@ using namespace std;
 #define SQ_WIDTH 2
 #define RETIRE_WIDTH 4
 #define SCHEDULER_SIZE 128
+//prajyotg :: IMP :: MIS Pred Penalty
 #define BRANCH_MISPREDICT_PENALTY 1
 //#define SCHEDULING_LATENCY 0
 //#define EXEC_LATENCY 0
@@ -122,17 +123,17 @@ class O3_CPU {
 
         next_ITLB_fetch = 0;
 
-        // branch
+        // prajyotg :: Branch data
         branch_mispredict_stall_fetch = 0;
         mispredicted_branch_iw_index = 0;
         fetch_stall = 0;
 	fetch_resume_cycle = 0;
         num_branch = 0;
         branch_mispredictions = 0;
-	for(uint32_t i=0; i<8; i++)
-	  {
-	    total_branch_types[i] = 0;
-	  }
+	    for(uint32_t i=0; i<8; i++)
+	    {
+	      total_branch_types[i] = 0;
+	    }
 	
         for (uint32_t i=0; i<STA_SIZE; i++)
 	  STA[i] = UINT64_MAX;
@@ -209,7 +210,7 @@ class O3_CPU {
 
     uint32_t check_and_add_lsq(uint32_t rob_index);
 
-    // branch predictor
+    // prajyotg :: branch predictor functions
     uint8_t predict_branch(uint64_t ip);
     void    initialize_branch_predictor(),
             last_branch_result(uint64_t ip, uint8_t taken);

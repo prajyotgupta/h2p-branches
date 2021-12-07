@@ -8,7 +8,7 @@ This is a modified version of ChampSim used by Prajyot Gupta.
 
 # Important Code structures & Objects in ChampSim
 
-* `ooo_cpu.c`: `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details.
+* `ooo_cpu.c`: Has **Branch Misprediction Pentalty**. `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details. Also contains size of ROB, LSQ and number of sources.
 
 **Properties:**
   - `branch_mispredict_stall_fetch`: Flag that says we should stall because of branch MP.

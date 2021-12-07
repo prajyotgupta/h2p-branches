@@ -266,7 +266,6 @@ class ooo_model_instr {
     
     cout << endl;
   }
-};
 
 /******************************************************************************
  * API          : print_branch_data()
@@ -288,5 +287,6 @@ class ooo_model_instr {
     cout << "*** Branch Mispredicted: " << (uint32_t)branch_mispredicted << endl;
     cout << "******** Printed Branch Data ********" << endl;
   }
+};
 
 #endif
