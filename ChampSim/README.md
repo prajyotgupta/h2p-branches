@@ -41,6 +41,9 @@ This is a modified version of ChampSim used by Prajyot Gupta.
   - It also has `branch_type`, which are of 8 types & `branch_target`. 
   - `fastset` dataype is used to model register/memory dependencies. 
 
+* `Main.cc`:
+   - Number of clock cycles: `current_core_cycle[<CPU number>]`
+
 # New functions Added
 
 * **print_branch_data()**: Added in `instructions.h`
