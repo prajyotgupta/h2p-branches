@@ -98,8 +98,8 @@ void print_branch_stats()
 {
     for (uint32_t i=0; i<NUM_CPUS; i++) {
         cout << endl << "CPU " << i << " Branch Prediction Accuracy: ";
-        cout << (100.0*(ooo_cpu[i].num_branch - ooo_cpu[i].branch_mispredictions)) / ooo_cpu[i].num_branch;
-        cout << "% MPKI: " << (1000.0*ooo_cpu[i].branch_mispredictions)/(ooo_cpu[i].num_retired - ooo_cpu[i].warmup_instructions);
+        cout << (100.0*(ooo_cpu[i].num_branch - ooo_cpu[i].branch_mispredictions)) / ooo_cpu[i].num_branch << endl;
+        cout << "% MPKI: " << (1000.0*ooo_cpu[i].branch_mispredictions)/(ooo_cpu[i].num_retired - ooo_cpu[i].warmup_instructions) << endl;
 	cout << " Average ROB Occupancy at Mispredict: " << (1.0*ooo_cpu[i].total_rob_occupancy_at_branch_mispredict)/ooo_cpu[i].branch_mispredictions << endl << endl;
 	
 	cout << "Branch types" << endl;
@@ -111,6 +111,9 @@ void print_branch_stats()
 	cout << "BRANCH_INDIRECT_CALL: " << ooo_cpu[i].total_branch_types[5] << " " << (100.0*ooo_cpu[i].total_branch_types[5])/(ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr) << "%" << endl;
 	cout << "BRANCH_RETURN: " << ooo_cpu[i].total_branch_types[6] << " " << (100.0*ooo_cpu[i].total_branch_types[6])/(ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr) << "%" << endl;
 	cout << "BRANCH_OTHER: " << ooo_cpu[i].total_branch_types[7] << " " << (100.0*ooo_cpu[i].total_branch_types[7])/(ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr) << "%" << endl << endl;
+    cout << "******** prajyotg :: Printing Branch Data ********" << endl;
+    cout << "Total Branches: " << ooo_cpu[i].num_branch << endl;
+    cout << "Total Mispredictions: " << ooo_cpu[i].branch_mispredictions << endl;
     }
 }
 
@@ -687,6 +690,7 @@ int main(int argc, char** argv)
     // end trace file setup
 
     // TODO: can we initialize these variables from the class constructor?
+    // prajyotg :: INITS
     srand(seed_number);
     champsim_seed = seed_number;
     for (int i=0; i<NUM_CPUS; i++) {
@@ -701,6 +705,7 @@ int main(int argc, char** argv)
         ooo_cpu[i].ROB.cpu = i;
 
         // BRANCH PREDICTOR
+        // prajyotg :: BP Init
         ooo_cpu[i].initialize_branch_predictor();
 
         // TLBs
@@ -787,7 +792,9 @@ int main(int argc, char** argv)
     uncore.LLC.llc_initialize_replacement();
     uncore.LLC.llc_prefetcher_initialize();
 
+    // prajyotg ------------------ Main Simulation ----------------------------
     // simulation entry point
+    
     start_time = time(NULL);
     uint8_t run_simulation = 1;
     while (run_simulation) {
@@ -802,8 +809,9 @@ int main(int argc, char** argv)
             // proceed one cycle
             current_core_cycle[i]++;
 
-            //cout << "Trying to process instr_id: " << ooo_cpu[i].instr_unique_id << " fetch_stall: " << +ooo_cpu[i].fetch_stall;
-            //cout << " stall_cycle: " << stall_cycle[i] << " current: " << current_core_cycle[i] << endl;
+            // prajyotg :: uncommenting few stuffs
+            // cout << "Trying to process instr_id: " << ooo_cpu[i].instr_unique_id << " fetch_stall: " << +ooo_cpu[i].fetch_stall;
+            // cout << " stall_cycle: " << stall_cycle[i] << " current: " << current_core_cycle[i] << endl;
 
             // core might be stalled due to page fault or branch misprediction
             if (stall_cycle[i] <= current_core_cycle[i]) {
@@ -894,6 +902,7 @@ int main(int argc, char** argv)
                 ooo_cpu[i].finish_sim_instr = ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr;
                 ooo_cpu[i].finish_sim_cycle = current_core_cycle[i] - ooo_cpu[i].begin_sim_cycle;
 
+                cout << endl;
                 cout << "Finished CPU " << i << " instructions: " << ooo_cpu[i].finish_sim_instr << " cycles: " << ooo_cpu[i].finish_sim_cycle;
                 cout << " cumulative IPC: " << ((float) ooo_cpu[i].finish_sim_instr / ooo_cpu[i].finish_sim_cycle);
                 cout << " (Simulation time: " << elapsed_hour << " hr " << elapsed_minute << " min " << elapsed_second << " sec) " << endl;
@@ -927,15 +936,18 @@ int main(int argc, char** argv)
         for (uint32_t i=0; i<NUM_CPUS; i++) {
             cout << endl << "CPU " << i << " cumulative IPC: " << (float) (ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr) / (current_core_cycle[i] - ooo_cpu[i].begin_sim_cycle); 
             cout << " instructions: " << ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr << " cycles: " << current_core_cycle[i] - ooo_cpu[i].begin_sim_cycle << endl;
-#ifndef CRC2_COMPILE
-            print_sim_stats(i, &ooo_cpu[i].L1D);
-            print_sim_stats(i, &ooo_cpu[i].L1I);
-            print_sim_stats(i, &ooo_cpu[i].L2C);
-	    ooo_cpu[i].l1i_prefetcher_final_stats();
-            ooo_cpu[i].L1D.l1d_prefetcher_final_stats();
-	    ooo_cpu[i].L2C.l2c_prefetcher_final_stats();
-#endif
-            print_sim_stats(i, &uncore.LLC);
+            //prajyotg :: Adding space
+            cout << endl;
+            // prajyotg :: commenting as not required for now
+// #ifndef CRC2_COMPILE
+            // print_sim_stats(i, &ooo_cpu[i].L1D);
+            // print_sim_stats(i, &ooo_cpu[i].L1I);
+            // print_sim_stats(i, &ooo_cpu[i].L2C);
+	    // ooo_cpu[i].l1i_prefetcher_final_stats();
+            // ooo_cpu[i].L1D.l1d_prefetcher_final_stats();
+	    // ooo_cpu[i].L2C.l2c_prefetcher_final_stats();
+// #endif
+            // print_sim_stats(i, &uncore.LLC);
         }
         uncore.LLC.llc_prefetcher_final_stats();
     }
@@ -944,13 +956,14 @@ int main(int argc, char** argv)
     for (uint32_t i=0; i<NUM_CPUS; i++) {
         cout << endl << "CPU " << i << " cumulative IPC: " << ((float) ooo_cpu[i].finish_sim_instr / ooo_cpu[i].finish_sim_cycle); 
         cout << " instructions: " << ooo_cpu[i].finish_sim_instr << " cycles: " << ooo_cpu[i].finish_sim_cycle << endl;
-#ifndef CRC2_COMPILE
-        print_roi_stats(i, &ooo_cpu[i].L1D);
-        print_roi_stats(i, &ooo_cpu[i].L1I);
-        print_roi_stats(i, &ooo_cpu[i].L2C);
-#endif
-        print_roi_stats(i, &uncore.LLC);
-        cout << "Major fault: " << major_fault[i] << " Minor fault: " << minor_fault[i] << endl;
+        // prajyotg :: commenting as not required for now
+// #ifndef CRC2_COMPILE
+        // print_roi_stats(i, &ooo_cpu[i].L1D);
+        // print_roi_stats(i, &ooo_cpu[i].L1I);
+        // print_roi_stats(i, &ooo_cpu[i].L2C);
+// #endif
+        // print_roi_stats(i, &uncore.LLC);
+        // cout << "Major fault: " << major_fault[i] << " Minor fault: " << minor_fault[i] << endl;
     }
 
     for (uint32_t i=0; i<NUM_CPUS; i++) {
@@ -963,7 +976,8 @@ int main(int argc, char** argv)
 
 #ifndef CRC2_COMPILE
     uncore.LLC.llc_replacement_final_stats();
-    print_dram_stats();
+    //prajyotg :: Commenting as not required
+    // print_dram_stats();
     print_branch_stats();
 #endif
 
