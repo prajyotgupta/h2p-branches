@@ -9,7 +9,7 @@ This is a modified version of ChampSim used by Prajyot Gupta.
 # Important Code structures & Objects in ChampSim
 
 * `ooo_cpu.c`: `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details:
-   - Properties:
+Properties:
     - `branch_mispredict_stall_fetch`: Flag that says we should stall because of branch MP.
     - `mispredicted_branch_iw_index` : Index in the ins window of the mispredicted branch. Fetch resumes after the instr at this index executes.
     - `num_branch`:
@@ -17,6 +17,11 @@ This is a modified version of ChampSim used by Prajyot Gupta.
     - `fetch_resume_cycle`:
     - `total_rob_occupancy_at_branch_mp`
     - `total_branch_types`: 8 types of branches
+
+Functions:
+    - `predict_branch(PC)`
+    - `initialize_branch_predictor`
+    - `last_branch_result(PC, is_taken)`
 
 * `instruction.h`: Three registers present which help us identify branches. Also defined 8 types of Branches.
 
