@@ -10,19 +10,19 @@ This is a modified version of ChampSim used by Prajyot Gupta.
 
 * `ooo_cpu.c`: `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details.
 
-Properties:
-    - `branch_mispredict_stall_fetch`: Flag that says we should stall because of branch MP.
-    - `mispredicted_branch_iw_index` : Index in the ins window of the mispredicted branch. Fetch resumes after the instr at this index executes.
-    - `num_branch`:
-    - `fetch_stall`:
-    - `fetch_resume_cycle`:
-    - `total_rob_occupancy_at_branch_mp`
-    - `total_branch_types`: 8 types of branches
+**Properties:**
+  - `branch_mispredict_stall_fetch`: Flag that says we should stall because of branch MP.
+  - `mispredicted_branch_iw_index` : Index in the ins window of the mispredicted branch. Fetch resumes after the instr at this index executes.
+  - `num_branch`:
+  - `fetch_stall`:
+  - `fetch_resume_cycle`:
+  - `total_rob_occupancy_at_branch_mp`
+  - `total_branch_types`: 8 types of branches
 
-Functions: There will be extended in branch predictor .CPP file
-    - `predict_branch(PC)`: Hash the PC value and provide the prediction: 0 or 1.
-    - `initialize_branch_predictor`
-    - `last_branch_result(PC, is_taken)`
+**Functions:** There will be extended in branch predictor .CPP file
+  - `predict_branch(PC)`: Hash the PC value and provide the prediction: 0 or 1.
+  - `initialize_branch_predictor`
+  - `last_branch_result(PC, is_taken)`
 
 * `instruction.h`: Three registers present which help us identify branches. Also defined 8 types of Branches.
 
