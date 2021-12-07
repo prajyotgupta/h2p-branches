@@ -8,7 +8,8 @@ This is a modified version of ChampSim used by Prajyot Gupta.
 
 # Important Code structures & Objects in ChampSim
 
-* `ooo_cpu.c`: `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details:
+* `ooo_cpu.c`: `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details.
+
 Properties:
     - `branch_mispredict_stall_fetch`: Flag that says we should stall because of branch MP.
     - `mispredicted_branch_iw_index` : Index in the ins window of the mispredicted branch. Fetch resumes after the instr at this index executes.
@@ -18,8 +19,8 @@ Properties:
     - `total_rob_occupancy_at_branch_mp`
     - `total_branch_types`: 8 types of branches
 
-Functions:
-    - `predict_branch(PC)`
+Functions: There will be extended in branch predictor .CPP file
+    - `predict_branch(PC)`: Hash the PC value and provide the prediction: 0 or 1.
     - `initialize_branch_predictor`
     - `last_branch_result(PC, is_taken)`
 
@@ -27,6 +28,12 @@ Functions:
 
 * `block.h`: Contains details about Reorder buffer - called `CORE_BUFFER`, and Load-Store Queue called `LSQ_QUEUE` with its entries. 
 
+* `champsim.h`: IMP: Contains details of Number of CPUs, Frequencies, Page Size, Cache fill delays.
+
+* `cache.h`: Contains details about cache types as below. IMP: Contains data about **LATENCY**, sets, ways, MSHR size. Contains Class Cache
+   - Cache types: ITLB, DTLB, STLB (second-level shared TLB), L1 I&D, L2, I&D and LLC.
+   - Queues in Cache Class: Write Queue, Read, Prefetch, MSHR & processed.
+   - Stats will use: Sim (hit, miss, access) and ROI (same); `total_miss_latency`, page table latency. 
 
 * General Observations. Each instruction has:
   - PC is called `ip` in the simulator.
