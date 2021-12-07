@@ -12,10 +12,15 @@ This is a modified version of ChampSim used by Prajyot Gupta.
 
 * **instruction.h**: Three registers present which help us identify branches. Also defined 8 types of Branches.
 
-* General Observations
+* General Observations. Each instruction has:
   - PC is called `ip` in the simulator.
-  - OOO Model instruction has `is_branch`, `branch_taken`, `branch_mispredicted` & `branch_prediction_made` as unit8_t.
-  - 
+  - Branch information for `is_branch`, `branch_taken`, `branch_mispredicted` & `branch_prediction_made` as unit8_t.
+  - It also has `branch_type`, which are of 8 types & `branch_target`. 
+  - `fastset` dataype is used to model register/memory dependencies. 
+
+# New functions Added
+
+* **print_branch_data()**: Added in `instructions.h`
 
 # ChampSim Setup Instructions from the OG Repo
 ## Compile
