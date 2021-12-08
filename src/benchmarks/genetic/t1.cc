@@ -7,14 +7,15 @@
 //
 //-----------------------------------------------------------------------------------------------
 #include <string>
-#include <cstdlib>
+#include <stdlib.h>
 #include <iostream>
 #include <time.h>
 #include <math.h>
+#include <random>
  
 using std::string;
 using namespace std;
-
+ 
 #define CROSSOVER_RATE            0.7
 #define MUTATION_RATE             0.001
 #define POP_SIZE                  100           //must be an even number
@@ -33,7 +34,7 @@ using namespace std;
 struct chromo_typ
 {
     //the binary bit string is held in a std::string
-    string   bits;  
+    string    bits;  
  
     float     fitness;
  
@@ -65,24 +66,24 @@ int main()
     //seed the random number generator
     srand((int)time(NULL));
  
-  //just loop endlessly)
+  //just loop endlessly until user gets bored :0)
   while (true)
   {
-      //storage for our population of chromosomes.
-      chromo_typ Population[POP_SIZE];
+    //storage for our population of chromosomes.
+    chromo_typ Population[POP_SIZE];
  
       //get a target number from the user. (no error checking)
+      // prajyotg :: Hard Code
       float Target = 5;
-      //prajyotg :: Commenting out for now
-      // cout << "\nInput a target number: ";
-      // cin >> Target;
-      // cout << endl << endl;
+    //   cout << "\nInput a target number: ";
+    //   cin >> Target;
+    // cout << endl << endl;
        
       //first create a random population, all with zero fitness.
       for (int i=0; i<POP_SIZE; i++)
       {
           Population[i].bits      = GetRandomBits(CHROMO_LENGTH);
-          Population[i].fitness   = 0.0f;
+          Population[i].fitness = 0.0f;
       }
  
       int GenerationsRequiredToFindASolution = 0;
@@ -111,12 +112,9 @@ int main()
               if (Population[i].fitness == 999.0f)
               {
                   cout << "\nSolution found in " << GenerationsRequiredToFindASolution << " generations!" << endl << endl;;
- 
                   PrintChromo(Population[i].bits);
- 
                   bFound = true;
- 
-          break;
+                  break;
               }
           }
  
@@ -137,8 +135,8 @@ int main()
               string offspring1 = Roulette(TotalFitness, Population);
               string offspring2 = Roulette(TotalFitness, Population);
  
-        //add crossover dependent on the crossover rate
-        Crossover(offspring1, offspring2);
+              //add crossover dependent on the crossover rate
+              Crossover(offspring1, offspring2);
  
               //now mutate dependent on the mutation rate
               Mutate(offspring1);
@@ -187,16 +185,20 @@ int main()
 //-----------------------------------------------------------------------------------------
 string  GetRandomBits(int length)
 {
-    string bit;
+    string bits;
+ 
     for (int i=0; i<length; i++)
     {
         if (RANDOM_NUM > 0.5f)
-            bit+= "1";
+ 
+            bits += "1";
+ 
         else
-            bit+= "0";
+ 
+            bits += "0";
     }
-
-    return bit;
+    //cout << "Bits Value - " << bits << endl;
+    return bits;
 }
  
 //---------------------------------BinToDec-----------------------------------------
@@ -289,8 +291,7 @@ int ParseBits(string bits, int* buffer)
     //  is included and delete it. (ie a '/' followed by a '0'). We take an easy
     //  way out here and just change the '/' to a '+'. This will not effect the 
     //  evolution of the solution
-    //  // prajyotg :: Updating the code to remove compilation error
-    for (int i=0; i<cBuff-1; i++)
+    for (int i=0; i<cBuff; i++)
     {
         if ( (buffer[i] == 13) && (buffer[i+1] == 0) )
          
