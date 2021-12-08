@@ -65,9 +65,11 @@ int main()
     //seed the random number generator
     srand((int)time(NULL));
  
+    int p=0;
   //just loop endlessly)
-  while (true)
+  while (p<10)
   {
+      p++;
       //storage for our population of chromosomes.
       chromo_typ Population[POP_SIZE];
  
@@ -91,6 +93,7 @@ int main()
       bool bFound = false;
  
       //enter the main GA loop
+      // prajyotg :: testing this code
       while(!bFound)
       {
           //this is used during roulette wheel sampling
@@ -170,7 +173,7 @@ int main()
  
       }
  
-    cout << "\n\n\n";
+    cout << "Test Ending" << endl;
  
   }//end while
  
@@ -427,7 +430,7 @@ void PrintGeneSymbol(int val)
 //-------------------------------------------------------------------------------------
 void Mutate(string &bits)
 {
-    for (int i=0; i<bits.length(); i++)
+    for (size_t i=0; i<bits.length(); i++)
     {
         if (RANDOM_NUM < MUTATION_RATE)
         {
