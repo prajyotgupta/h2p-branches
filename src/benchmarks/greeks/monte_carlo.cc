@@ -48,9 +48,26 @@ void monte_carlo_call_price(const int num_sims,
     Sm_cur = Sm_adjust * expgauss;
 
     // Calculate the continual pay-off sum for each increment/decrement
-    payoff_sum_p += std::max(Sp_cur - K, 0.0);
-    payoff_sum += std::max(S_cur - K, 0.0);
-    payoff_sum_m += std::max(Sm_cur - K, 0.0);
+    // prajyotg :: modifying code to add IF loop
+    if (Sp_cur-K > 0)
+    {
+      payoff_sum_p += (Sp_cur - K);
+    } else {
+      payoff_sum_p += 0.0;
+    }
+    
+    if (S_cur - K > 0){
+      payoff_sum += (S_cur - K);
+    } else {
+      payoff_sum += 0.0;
+    }
+
+    if (Sm_cur - K > 0){
+      payoff_sum_m += (Sm_cur - K);
+    } else {
+      payoff_sum_m += 0.0;
+    }
+
   }
 
   // There are three separate prices
