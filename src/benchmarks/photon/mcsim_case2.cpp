@@ -92,11 +92,13 @@ void MCSimulation(double *&records, const uint32_t &size)
         double w = 1;
         double x = 0, y = 0, z = 0, mux = 0, muy = 0, muz = 1;
         while (w != 0) {
-            double s = -log(drand48()) / sigma_t;
-            double distToBoundary = 0;
-            if (muz > 0) distToBoundary = (d - z) / muz;
-            else if (muz < 0) distToBoundary = -z / muz;
+            //prajoytg :: NO RAND :: double s = -log(drand48()) / sigma_t;
+            //prajoytg :: NO RAND :: double distToBoundary = 0;
+            //prajoytg :: NO RAND :: if (muz > 0) distToBoundary = (d - z) / muz;
+            //prajoytg :: NO RAND :: else if (muz < 0) distToBoundary = -z / muz;
             // cout << "Prajyotg: disttoBoundary = " << distToBoundary << endl;
+             double s = 1;
+             double distToBoundary = 0.5; 
 
             // [comment]
             // Did the pack leave the slab?
