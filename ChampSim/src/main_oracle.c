@@ -692,10 +692,13 @@ int main(int argc, char** argv)
     }
     // end trace file setup
 
+    //////////////////////////////////////// Finish the trace file setup n ooo_cpu[0].trace_file.. onto Pipeline ///////////////////////////
+
     // TODO: can we initialize these variables from the class constructor?
-    // prajyotg :: INITS
     srand(seed_number);
     champsim_seed = seed_number;
+
+    // prajyotg :: Loop to do all INITs
     for (int i=0; i<NUM_CPUS; i++) {
 
         ooo_cpu[i].cpu = i; 
@@ -714,7 +717,7 @@ int main(int argc, char** argv)
         // TLBs
         ooo_cpu[i].ITLB.cpu = i;
         ooo_cpu[i].ITLB.cache_type = IS_ITLB;
-	ooo_cpu[i].ITLB.MAX_READ = 2;
+	    ooo_cpu[i].ITLB.MAX_READ = 2;
         ooo_cpu[i].ITLB.fill_level = FILL_L1;
         ooo_cpu[i].ITLB.extra_interface = &ooo_cpu[i].L1I;
         ooo_cpu[i].ITLB.lower_level = &ooo_cpu[i].STLB; 
@@ -742,8 +745,8 @@ int main(int argc, char** argv)
         ooo_cpu[i].L1I.fill_level = FILL_L1;
         ooo_cpu[i].L1I.lower_level = &ooo_cpu[i].L2C; 
         ooo_cpu[i].l1i_prefetcher_initialize();
-	ooo_cpu[i].L1I.l1i_prefetcher_cache_operate = cpu_l1i_prefetcher_cache_operate;
-	ooo_cpu[i].L1I.l1i_prefetcher_cache_fill = cpu_l1i_prefetcher_cache_fill;
+	    ooo_cpu[i].L1I.l1i_prefetcher_cache_operate = cpu_l1i_prefetcher_cache_operate;
+	    ooo_cpu[i].L1I.l1i_prefetcher_cache_fill = cpu_l1i_prefetcher_cache_fill;
 
         ooo_cpu[i].L1D.cpu = i;
         ooo_cpu[i].L1D.cache_type = IS_L1D;
@@ -802,11 +805,11 @@ int main(int argc, char** argv)
     uint8_t run_simulation = 1;
     while (run_simulation) {
 
-        uint64_t elapsed_second = (uint64_t)(time(NULL) - start_time),
-                 elapsed_minute = elapsed_second / 60,
-                 elapsed_hour = elapsed_minute / 60;
-        elapsed_minute -= elapsed_hour*60;
-        elapsed_second -= (elapsed_hour*3600 + elapsed_minute*60);
+        uint64_t elapsed_second  = (uint64_t)(time(NULL) - start_time),
+                 elapsed_minute  = elapsed_second / 60,
+                 elapsed_hour    = elapsed_minute / 60;
+                 elapsed_minute -= elapsed_hour*60;
+                 elapsed_second -= (elapsed_hour*3600 + elapsed_minute*60);
 
         for (int i=0; i<NUM_CPUS; i++) {
             // proceed one cycle
@@ -816,46 +819,47 @@ int main(int argc, char** argv)
             // cout << "Trying to process instr_id: " << ooo_cpu[i].instr_unique_id << " fetch_stall: " << +ooo_cpu[i].fetch_stall;
             // cout << " stall_cycle: " << stall_cycle[i] << " current: " << current_core_cycle[i] << endl;
 
-            // core might be stalled due to page fault or branch misprediction
+            //prajyotg :: core might be stalled due to page fault or branch misprediction
+            // Execute the pipeline & update ROB iff not stalled
             if (stall_cycle[i] <= current_core_cycle[i]) {
 
-	      // retire
-	      if ((ooo_cpu[i].ROB.entry[ooo_cpu[i].ROB.head].executed == COMPLETED) && (ooo_cpu[i].ROB.entry[ooo_cpu[i].ROB.head].event_cycle <= current_core_cycle[i]))
-		ooo_cpu[i].retire_rob();
+	            // retire
+	            if ((ooo_cpu[i].ROB.entry[ooo_cpu[i].ROB.head].executed == COMPLETED) && (ooo_cpu[i].ROB.entry[ooo_cpu[i].ROB.head].event_cycle <= current_core_cycle[i]))
+		        ooo_cpu[i].retire_rob();
 
-	      // complete 
-	      ooo_cpu[i].update_rob();
+	            // complete 
+	            ooo_cpu[i].update_rob();
 
-	      // schedule
-	      uint32_t schedule_index = ooo_cpu[i].ROB.next_schedule;
-	      if ((ooo_cpu[i].ROB.entry[schedule_index].scheduled == 0) && (ooo_cpu[i].ROB.entry[schedule_index].event_cycle <= current_core_cycle[i]))
-		ooo_cpu[i].schedule_instruction();
-	      // execute
-	      ooo_cpu[i].execute_instruction();
+	            // schedule
+	            uint32_t schedule_index = ooo_cpu[i].ROB.next_schedule;
+	            if ((ooo_cpu[i].ROB.entry[schedule_index].scheduled == 0) && (ooo_cpu[i].ROB.entry[schedule_index].event_cycle <= current_core_cycle[i]))
+		oo      o_cpu[i].schedule_instruction();
 
-	      ooo_cpu[i].update_rob();
+	            // execute
+	            ooo_cpu[i].execute_instruction();
+	            ooo_cpu[i].update_rob();
 
-	      // memory operation
-	      ooo_cpu[i].schedule_memory_instruction();
-	      ooo_cpu[i].execute_memory_instruction();
+	            // memory operation
+	            ooo_cpu[i].schedule_memory_instruction();
+	            ooo_cpu[i].execute_memory_instruction();
+	            ooo_cpu[i].update_rob();
 
-	      ooo_cpu[i].update_rob();
-
-	      // decode
-	      if(ooo_cpu[i].DECODE_BUFFER.occupancy > 0)
-		{
-		  ooo_cpu[i].decode_and_dispatch();
-		}
-	      
-	      // fetch
-	      ooo_cpu[i].fetch_instruction();
-	      
-	      // read from trace
-	      if ((ooo_cpu[i].IFETCH_BUFFER.occupancy < ooo_cpu[i].IFETCH_BUFFER.SIZE) && (ooo_cpu[i].fetch_stall == 0))
-		{
-		  ooo_cpu[i].read_from_trace();
-		}
-	    }
+	            // decode
+	            if(ooo_cpu[i].DECODE_BUFFER.occupancy > 0)
+		        {
+		          ooo_cpu[i].decode_and_dispatch();
+		        }
+	              
+	            // fetch
+	            ooo_cpu[i].fetch_instruction();
+	              
+                //prajyotg :: This function READS data from the trace!! 
+	            // read from trace
+	            if ((ooo_cpu[i].IFETCH_BUFFER.occupancy < ooo_cpu[i].IFETCH_BUFFER.SIZE) && (ooo_cpu[i].fetch_stall == 0))
+		        {
+		          ooo_cpu[i].read_from_trace();
+		        }
+	        }
 
             // heartbeat information
             if (show_heartbeat && (ooo_cpu[i].num_retired >= ooo_cpu[i].next_print_instruction)) {
