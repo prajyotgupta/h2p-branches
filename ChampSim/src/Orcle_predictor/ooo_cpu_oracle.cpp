@@ -159,7 +159,7 @@ void O3_CPU::read_from_trace()
 
             //prajyotg :: THIS IS WHERE THE MAGIC HAPPENS!
             //
-            //instructions is present in `trace_read_instr`
+            //instructions are present in `trace_read_instr`
             //
             //Main variables now are curr_instr & next_instr
 		    if(instr_unique_id == 0)
@@ -176,14 +176,17 @@ void O3_CPU::read_from_trace()
             ooo_model_instr arch_instr;
             int num_reg_ops = 0, num_mem_ops = 0;
 
-            arch_instr.instr_id = instr_unique_id;
-            arch_instr.ip = current_instr.ip;
-            arch_instr.is_branch = current_instr.is_branch;
+            //prajyotg :: Curr_inst --> Passed into the pipeline as arch_instr
+            arch_instr.instr_id     = instr_unique_id;
+            arch_instr.ip           = current_instr.ip;
+            arch_instr.is_branch    = current_instr.is_branch;
             arch_instr.branch_taken = current_instr.branch_taken;
 
             arch_instr.asid[0] = cpu;
             arch_instr.asid[1] = cpu;
 
+            //prajyotg :: Allocate flags for SP & PC, later
+            //used to identify types of branches
 		    bool reads_sp = false;
 		    bool writes_sp = false;
 		    bool reads_flags = false;
@@ -217,7 +220,7 @@ void O3_CPU::read_from_trace()
 		      }
 		    */
 		   
-                //prajyotg :: CHL DST/SRC register
+                //prajyotg :: CHK DST/SRC register
                 if (arch_instr.destination_registers[i])
                     num_reg_ops++;
 
@@ -340,6 +343,8 @@ void O3_CPU::read_from_trace()
 		
 
 /************************* Prajyotg:: need to modify this logic **********************/        
+        // If the trace says branch is taken
+        // Change the next_instr PC value with Branch target
 		if((arch_instr.is_branch == 1) && (arch_instr.branch_taken == 1))
 		  {
 		    arch_instr.branch_target = next_instr.ip;
@@ -351,7 +356,9 @@ void O3_CPU::read_from_trace()
 		    num_reads++;
 
             // handle branch prediction
-// prajoytg ---------------------- MAIN Branching Logic 
+// Notes:
+// arch_instr --> IFETCH_BUFFER (added using add_to_ifetch_buffer API)
+//
             if (IFETCH_BUFFER.entry[ifetch_buffer_index].is_branch) {
 
                 DP( if (warmup_complete[cpu]) {
@@ -359,44 +366,61 @@ void O3_CPU::read_from_trace()
 
                 num_branch++;
 
-			    // handle branch prediction & branch predictor update
-                // prajoytg :: PREDICT_BRANCH called here
+/********************************** prajyotg :: Modify this Code for Branch Predictor update ***********
+* Notes:
+* Description  : Below code handles branch prediction & predictor updates
+* Variables    : branch_prediction        - returns TAKEN or NOT TAKEN from the [BP]
+*                predicted_branch_target  - Contains the branch target predicted by [BP}
+*                arch_instr               - contains the actual trace instruction [TR]
+*                IFETCH_BUFFER            - Above arch_instr gets added to this buffer [TR}
+*                                         - Will have to play around with `.branch_taken` & `.ip` &
+*                                           `branch_target`
+*
+* Functions    : Oracle Predictor - branch_prediction = arch_instr.branch_taken
+*                No Predictor     - branch_prediction = Not Taken (0) always!
+* *****************************************************************************************************/
+
                 // For an oracle predictor
-			    uint8_t branch_prediction = predict_branch(IFETCH_BUFFER.entry[ifetch_buffer_index].ip);
-			    uint64_t predicted_branch_target = IFETCH_BUFFER.entry[ifetch_buffer_index].branch_target;
+			    //prajyotg :: BP_Oracle :: uint8_t  branch_prediction       = predict_branch(IFETCH_BUFFER.entry[ifetch_buffer_index].ip);
+			    //prajyotg :: BP_Oracle :: uint64_t predicted_branch_target = IFETCH_BUFFER.entry[ifetch_buffer_index].branch_target;
+                
+                uint8_t  branch_prediction        = arch_instr.branch_taken;
+                uint64_t predicted_branch_target  = arch_instr.branch_target; 
+
+                //prajyotg :: If predicted NOT TAKEN
 			    if(branch_prediction == 0)
 			      {
 			        predicted_branch_target = 0;
-			      }
+                  }
+
 			    // call code prefetcher every time the branch predictor is used
+                // prajyotg :: l1i_pref_branch_op --> EMPTY API
 			    l1i_prefetcher_branch_operate(IFETCH_BUFFER.entry[ifetch_buffer_index].ip,
 			    			      IFETCH_BUFFER.entry[ifetch_buffer_index].branch_type,
 			    			      predicted_branch_target);
 			    
+                //prajyotg :: Check for misprediction
 			    if(IFETCH_BUFFER.entry[ifetch_buffer_index].branch_taken != branch_prediction)
 			      {
 			        branch_mispredictions++;
 			        total_rob_occupancy_at_branch_mispredict += ROB.occupancy;
-			        if(warmup_complete[cpu])
-			          {
-			    	fetch_stall = 1;
-			    	instrs_to_read_this_cycle = 0;
-			    	IFETCH_BUFFER.entry[ifetch_buffer_index].branch_mispredicted = 1;
-			          }
+			        if(warmup_complete[cpu]){
+			    	  fetch_stall = 1;
+			    	  instrs_to_read_this_cycle = 0;
+			    	  IFETCH_BUFFER.entry[ifetch_buffer_index].branch_mispredicted = 1;
+			        }
 			      }
-			    else
-			      {
-			        // correct prediction
+			    // correct prediction
+			    else{
 			        if(branch_prediction == 1)
 			          {
-			    	// if correctly predicted taken, then we can't fetch anymore instructions this cycle
-			    	instrs_to_read_this_cycle = 0;
+			    	    // if correctly predicted taken, then we can't fetch anymore instructions this cycle
+			    	    instrs_to_read_this_cycle = 0;
 			          }
 			      }
 			    
 			    last_branch_result(IFETCH_BUFFER.entry[ifetch_buffer_index].ip, IFETCH_BUFFER.entry[ifetch_buffer_index].branch_taken);
-                        }
-
+           }
            if ((num_reads >= instrs_to_read_this_cycle) || (IFETCH_BUFFER.occupancy == IFETCH_BUFFER.SIZE))
                             continue_reading = 0;
          }
