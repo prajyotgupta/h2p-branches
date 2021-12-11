@@ -144,8 +144,8 @@ void O3_CPU::read_from_trace()
     //prajyotg :: This is the main TRACE READING function!!!! Starts from here! //////////////////////
 	else{
 	    input_instr trace_read_instr;
+        //TODO :: prajyotg :: Terminate run once all instructions complete
         if (!fread(&trace_read_instr, instr_size, 1, trace_file)){
-        //TODO :: prajyotg :: Terminate run
             // reached end of file for this trace
             cout << "*** Reached end of trace for Core: " << cpu << " Repeating trace: " << trace_string << endl; 
             // close the trace file and re-open it
@@ -162,6 +162,7 @@ void O3_CPU::read_from_trace()
             //instructions are present in `trace_read_instr`
             //
             //Main variables now are curr_instr & next_instr
+            //
 		    if(instr_unique_id == 0)
 		    {
 		        current_instr = next_instr = trace_read_instr;
@@ -380,12 +381,11 @@ void O3_CPU::read_from_trace()
 *                No Predictor     - branch_prediction = Not Taken (0) always!
 * *****************************************************************************************************/
 
-                // For an oracle predictor
-			    //prajyotg :: BP_Oracle :: uint8_t  branch_prediction       = predict_branch(IFETCH_BUFFER.entry[ifetch_buffer_index].ip);
-			    //prajyotg :: BP_Oracle :: uint64_t predicted_branch_target = IFETCH_BUFFER.entry[ifetch_buffer_index].branch_target;
+                // For no_BP predictor
+			    //prajyotg :: No_BP :: uint8_t  branch_prediction       = predict_branch(IFETCH_BUFFER.entry[ifetch_buffer_index].ip);
+			    //prajyotg :: No_BP :: uint64_t predicted_branch_target = IFETCH_BUFFER.entry[ifetch_buffer_index].branch_target;
                 
-                uint8_t  branch_prediction        = arch_instr.branch_taken;
-                uint64_t predicted_branch_target  = arch_instr.branch_target; 
+                uint8_t  branch_prediction  = 0;
 
                 //prajyotg :: If predicted NOT TAKEN
 			    if(branch_prediction == 0)
@@ -589,7 +589,7 @@ uint32_t O3_CPU::check_rob(uint64_t instr_id)
     return ROB.SIZE;
 }
 
-//prajyotg :: Updating for Oracle predictor
+//prajyotg :: Updating for No_BP predictor
 void O3_CPU::fetch_instruction()
 {
   // TODO: can we model wrong path execusion?
