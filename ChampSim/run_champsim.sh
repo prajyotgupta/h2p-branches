@@ -6,7 +6,7 @@ if [ "$#" -lt 4 ]; then
     exit 1
 fi
 
-TRACE_DIR=$PWD/dpc3_traces
+TRACE_DIR=$PWD/dpc3_traces/benchmarks
 BINARY=${1}
 N_WARM=${2}
 N_SIM=${3}
@@ -42,5 +42,15 @@ if [ ! -f "$TRACE_DIR/$TRACE" ] ; then
 fi
 
 #prajyotg :: updating
-mkdir -p results/results_${TRACE}_${N_SIM}M
-(./bin/${BINARY} -warmup_instructions ${N_WARM}000000 -simulation_instructions ${N_SIM}000000 ${OPTION} -traces ${TRACE_DIR}/${TRACE}) &> results/results_${TRACE}_${N_SIM}M/${TRACE}-${BINARY}${OPTION}.txt
+mkdir -p output_${N_SIM}M/${TRACE}
+echo "************************ Starting ChampSim ****************************"
+echo "** Parameters mentioned below:"
+echo "** TRACE_DIR =$TRACE_DIR"
+echo "** BINARY= $BINARY"
+echo "** N_WARM= $N_WARM"
+echo "** N_SIM=  $N_SIM"
+echo "** TRACE=  $TRACE"
+echo "** OPTION= $OPTION"
+echo "********** Here goes nothing! *****************************************"
+
+(./bin/${BINARY} -warmup_instructions ${N_WARM}000000 -simulation_instructions ${N_SIM}000000 ${OPTION} -traces ${TRACE_DIR}/${TRACE}) &> output_${N_SIM}M/${TRACE}/${TRACE}-${BINARY}${OPTION}.txt

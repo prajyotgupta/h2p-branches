@@ -9,6 +9,7 @@ This is a modified version of ChampSim used by Prajyot Gupta.
 # Important Code structures & Objects in ChampSim
 
 * `ooo_cpu.c`: Has **Branch Misprediction Pentalty**. `arch_instr` is an object of class `ooo_model_instr`, defined in `instruction.h` file. Below are the branch details. Also contains size of ROB, LSQ and number of sources.
+  - ROB gets updated on 3 cases, when: Instruction is (1) fetched (2) completed and (3) retired.
 
 **Properties:**
   - `branch_mispredict_stall_fetch`: Flag that says we should stall because of branch MP.
