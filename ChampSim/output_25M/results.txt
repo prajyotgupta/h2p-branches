@@ -1,0 +1,35 @@
+600.perlbench_s-210B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.52768 instructions: 25000000 cycles: 47377205
+600.perlbench_s-210B.-bimodal_ORACLE   CPU 0 cumulative IPC: 1.57027 instructions: 25000000 cycles: 15920789
+600.perlbench_s-210B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 1.42516 instructions: 25000001 cycles: 17541868
+
+605.mcf_s-665B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.164089 instructions: 25000001 cycles: 152356084
+605.mcf_s-665B.-bimodal_ORACLE   CPU 0 cumulative IPC: 0.69201 instructions: 25000001 cycles: 36126627
+605.mcf_s-665B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 0.391821 instructions: 25000001 cycles: 63804569
+
+620.omnetpp_s-874B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.179515 instructions: 25000000 cycles: 139264021
+620.omnetpp_s-874B.-bimodal_ORACLE   CPU 0 cumulative IPC: 0.414741 instructions: 25000003 cycles: 60278627
+620.omnetpp_s-874B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 0.360507 instructions: 25000003 cycles: 69346787
+
+623.xalancbmk_s-700B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.253419 instructions: 25000000 cycles: 98651036
+623.xalancbmk_s-700B.-bimodal_ORACLE   CPU 0 cumulative IPC: 0.694979 instructions: 25000000 cycles: 35972314
+623.xalancbmk_s-700B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 0.65634 instructions: 25000000 cycles: 38090025
+
+625.x264_s-12B.-bimodal_No_BP   CPU 0 cumulative IPC: 1.02833 instructions: 25000002 cycles: 24311158
+625.x264_s-12B.-bimodal_ORACLE   CPU 0 cumulative IPC: 1.74369 instructions: 25000002 cycles: 14337432
+625.x264_s-12B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 1.69979 instructions: 25000002 cycles: 14707726
+
+631.deepsjeng_s-928B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.423945 instructions: 25000001 cycles: 58969889
+631.deepsjeng_s-928B.-bimodal_ORACLE   CPU 0 cumulative IPC: 1.28925 instructions: 25000001 cycles: 19391141
+631.deepsjeng_s-928B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 1.02353 instructions: 25000001 cycles: 24425277
+
+641.leela_s-800B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.364579 instructions: 25000000 cycles: 68572214
+641.leela_s-800B.-bimodal_ORACLE   CPU 0 cumulative IPC: 1.11677 instructions: 25000003 cycles: 22386054
+641.leela_s-800B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 0.804032 instructions: 25000001 cycles: 31093286
+
+648.exchange2_s-1699B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.556227 instructions: 25000001 cycles: 44945678
+648.exchange2_s-1699B.-bimodal_ORACLE   CPU 0 cumulative IPC: 2.15536 instructions: 25000001 cycles: 11598984
+648.exchange2_s-1699B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 1.88586 instructions: 25000001 cycles: 13256560
+
+657.xz_s-3167B.-bimodal_No_BP   CPU 0 cumulative IPC: 0.555051 instructions: 25000002 cycles: 45040918
+657.xz_s-3167B.-bimodal_ORACLE   CPU 0 cumulative IPC: 1.40021 instructions: 25000001 cycles: 17854508
+657.xz_s-3167B.-perceptron-no-no-no-no-lru-1core   CPU 0 cumulative IPC: 1.05363 instructions: 25000001 cycles: 23727551

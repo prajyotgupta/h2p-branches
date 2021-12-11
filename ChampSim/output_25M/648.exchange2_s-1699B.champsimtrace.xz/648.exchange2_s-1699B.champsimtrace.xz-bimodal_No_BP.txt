@@ -1,0 +1,43 @@
+
+*** ChampSim Multicore Out-of-Order Simulator ***
+
+Warmup Instructions: 1000000
+Simulation Instructions: 25000000
+Number of CPUs: 1
+LLC sets: 2048
+LLC ways: 16
+Off-chip DRAM Size: 4096 MB Channels: 1 Width: 64-bit Data Rate: 3200 MT/s
+
+CPU 0 runs /mnt/d/users/prajyotg/acads/RA/h2p-branches/ChampSim/dpc3_traces//648.exchange2_s-1699B.champsimtrace.xz
+CPU 0 Bimodal branch predictor
+
+Warmup complete CPU 0 instructions: 1000003 cycles: 306108 (Simulation time: 0 hr 0 min 2 sec) 
+
+Heartbeat CPU 0 instructions: 10000003 cycles: 16460093 heartbeat IPC: 0.60753 cumulative IPC: 0.557138 (Simulation time: 0 hr 0 min 11 sec) 
+Heartbeat CPU 0 instructions: 20000001 cycles: 34440826 heartbeat IPC: 0.556151 cumulative IPC: 0.556618 (Simulation time: 0 hr 0 min 20 sec) 
+
+Finished CPU 0 instructions: 25000001 cycles: 44945678 cumulative IPC: 0.556227 (Simulation time: 0 hr 0 min 26 sec) 
+
+ChampSim completed all CPUs
+
+Region of Interest Statistics
+
+CPU 0 cumulative IPC: 0.556227 instructions: 25000001 cycles: 44945678
+
+CPU 0 Branch Prediction Accuracy: 34.5833
+% MPKI: 88.4357
+ Average ROB Occupancy at Mispredict: 2.38522
+
+Branch types
+NOT_BRANCH: 21619934 86.4797%
+BRANCH_DIRECT_JUMP: 242121 0.968484%
+BRANCH_INDIRECT: 0 0%
+BRANCH_CONDITIONAL: 3133402 12.5336%
+BRANCH_DIRECT_CALL: 2091 0.008364%
+BRANCH_INDIRECT_CALL: 0 0%
+BRANCH_RETURN: 2091 0.008364%
+BRANCH_OTHER: 0 0%
+
+******** prajyotg :: Printing Branch Data ********
+Total Branches: 3379705
+Total Mispredictions: 2210892
