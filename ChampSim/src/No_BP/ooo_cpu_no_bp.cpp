@@ -386,6 +386,7 @@ void O3_CPU::read_from_trace()
 			    //prajyotg :: No_BP :: uint64_t predicted_branch_target = IFETCH_BUFFER.entry[ifetch_buffer_index].branch_target;
                 
                 uint8_t  branch_prediction  = 0;
+                uint64_t predicted_branch_target = 0;
 
                 //prajyotg :: If predicted NOT TAKEN
 			    if(branch_prediction == 0)
